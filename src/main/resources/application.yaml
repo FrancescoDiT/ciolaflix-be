@@ -1,0 +1,52 @@
+server:
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: ciolaflix-be # Application name
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ciolaflix # Primary database URL
+    username: root # Database username
+    password: root # Database password
+    driver-class-name: org.postgresql.Driver # PostgreSQL JDBC driver
+
+blackout:
+  base-url:  # Base URL for all blackout API endpoints []. It is recommended to take a look at base url configuration in the docs.
+
+  # !!REQUIRED!! Config to access and configure primary datasource
+  parent:
+    datasource:
+      repository: xyz.fdt.ciolaflixbe.repo # JPA repositories package
+      model: xyz.fdt.ciolaflixbe.model # JPA models package
+      jpaProperties:
+        hibernate.hbm2ddl.auto: update # Hibernate DDL mode [update]
+        hibernate.format_sql: true # Format SQL queries [true]
+        hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect # PostgreSQL dialect
+
+  # !!REQUIRED!! JWT configuration
+  jwt:
+    access-token-exp: 900000 # Expiration time for the access token (15 min) [900000 (15 min)]
+    refresh-token-exp-no-remember: 3600000 # Refresh token expiration when "remember me" is false (1 hour) [3600000 (1 hour)]
+    refresh-token-exp: 2592000000 # Refresh token expiration when "remember me" is true (30 days) [2592000000 (30 days)]
+    secret: cmV0dXJudGFsZXN3aXJlZGF3bmhpZGVvdXJkZXBlbmRsYWJvcnF1YXJ0ZXJjb2xsZWc= # JWT secret key (should be base64-encoded in production)
+
+  # CORS configuration
+  cors:
+    allow-credentials: false # Allow credentials (cookies) in CORS requests [false]
+    allowed-headers: # Allowed headers in CORS requests [*]
+      - "*"
+    allowed-methods: # Allowed HTTP methods in CORS requests [*]
+      - "*"
+    allowed-origins: # Allowed origins for CORS (use specific domains in production) [*]
+      - "*"
+
+  # Security filter chain rules
+  filterchain:
+    allowed:
+      - /ciola/signup
+
+  # OpenAPI/Swagger configuration
+  openapi:
+    paths-to-match: # !!REQUIRED!! Paths to include in OpenAPI documentation
+      - "/**"
