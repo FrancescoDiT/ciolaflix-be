@@ -1,6 +1,5 @@
 package xyz.fdt.ciolaflixbe.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -8,7 +7,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Builder;
@@ -19,15 +17,15 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "continue_watching", uniqueConstraints = {
-    @UniqueConstraint(name = "uk_continue_watching_user_media", columnNames = {"user_id", "media_id"})
+@Table(name = "liked", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_liked_user_media", columnNames = {"user_id", "media_id"})
 })
 @Getter
 @Setter
-public class ContinueWatching {
+public class Liked {
 
     @EmbeddedId
-    private ContinueWatchingId id;
+    private LikedId id;
 
     @ManyToOne
     @MapsId("userId")
@@ -39,47 +37,34 @@ public class ContinueWatching {
     @JoinColumn(name = "media_id", nullable = false)
     private Media media;
 
-    @Column(name = "playback_time", nullable = false)
-    private int currentTime;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    public ContinueWatching() {
+    public Liked() {
     }
 
-    @Builder
-    public ContinueWatching(CiolaMan user, Media media, int currentTime) {
+    public Liked(CiolaMan user, Media media) {
         this.user = user;
         this.media = media;
-        this.currentTime = currentTime;
     }
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         if (this.id == null) {
-            this.id = new ContinueWatchingId(
+            this.id = new LikedId(
                 this.user != null ? this.user.getId() : null,
                 this.media != null ? this.media.getId() : null
             );
         }
     }
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ContinueWatching that = (ContinueWatching) o;
-        return Objects.equals(id, that.id);
+        Liked liked = (Liked) o;
+        return Objects.equals(id, liked.id);
     }
 
     @Override
