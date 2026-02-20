@@ -36,22 +36,6 @@ public class CiolaMan {
     @Column(nullable = false, unique = true)
     private Long authAccountId;
 
-    @ManyToMany
-    @JoinTable(
-            name = "ciola_man_liked",
-            joinColumns = @JoinColumn(name = "ciola_man_id"),
-            inverseJoinColumns = @JoinColumn(name = "liked_id")
-    )
-    private Set<Liked> liked = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-        name = "ciola_man_watchlater",
-        joinColumns = @JoinColumn(name = "ciola_man_id"),
-        inverseJoinColumns = @JoinColumn(name = "watchlater_id")
-    )
-    private Set<WatchLater> watchLater = new HashSet<>();
-
     @OneToMany(mappedBy = "ciolaMan")
     private Set<ContinueWatching> continueWatchings = new HashSet<>();
 
