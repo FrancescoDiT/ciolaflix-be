@@ -22,7 +22,6 @@ import xyz.fdt.ciolaflixbe.service.CiolaService;
 @Tag(name = "Ciola", description = "User management operations")
 public class CiolaController {
 
-
     private final CiolaService ciolaService;
 
     @PostMapping("/signup")
