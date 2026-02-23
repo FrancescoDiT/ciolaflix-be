@@ -1,4 +1,4 @@
-package xyz.fdt.ciolaflixbe.model;
+package xyz.fdt.ciolaflixbe.model.watchLater;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -11,7 +11,7 @@ import java.util.Objects;
 @Embeddable
 @Getter
 @Setter
-public class ContinueWatchingId implements Serializable {
+public class WatchLaterId implements Serializable {
 
     @Column(name = "user_id")
     private Long userId;
@@ -19,10 +19,10 @@ public class ContinueWatchingId implements Serializable {
     @Column(name = "media_id")
     private Long mediaId;
 
-    public ContinueWatchingId() {
+    public WatchLaterId() {
     }
 
-    public ContinueWatchingId(Long userId, Long mediaId) {
+    public WatchLaterId(Long userId, Long mediaId) {
         this.userId = userId;
         this.mediaId = mediaId;
     }
@@ -31,7 +31,7 @@ public class ContinueWatchingId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ContinueWatchingId that = (ContinueWatchingId) o;
+        WatchLaterId that = (WatchLaterId) o;
         return Objects.equals(userId, that.userId) && Objects.equals(mediaId, that.mediaId);
     }
 

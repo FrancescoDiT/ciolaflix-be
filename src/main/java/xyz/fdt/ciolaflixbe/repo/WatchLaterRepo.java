@@ -2,8 +2,8 @@ package xyz.fdt.ciolaflixbe.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import xyz.fdt.ciolaflixbe.model.WatchLater;
-import xyz.fdt.ciolaflixbe.model.WatchLaterId;
+import xyz.fdt.ciolaflixbe.model.watchLater.WatchLater;
+import xyz.fdt.ciolaflixbe.model.watchLater.WatchLaterId;
 
 import java.util.List;
 import java.util.Optional;

@@ -26,7 +26,7 @@ public class LikedController {
 
     private final LikedService likedService;
 
-    @PostMapping("/add/{mediaId}")
+    @PostMapping("/add/{mediaId}/{mediaType}")
     @Operation(
             summary = "Add media to liked",
             description = "Adds a media item to the current user's liked list. If the media doesn't exist in the database, it will be created automatically."
@@ -45,6 +45,16 @@ public class LikedController {
                     responseCode = "401",
                     description = "Unauthorized - user not authenticated",
                     content = @Content(schema = @Schema(implementation = String.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Media not found in TMDB",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error connecting to TMDB",
+                    content = @Content(schema = @Schema(implementation = String.class))
             )
     })
     public ResponseEntity<Void> addLiked(
@@ -53,13 +63,13 @@ public class LikedController {
                     required = true,
                     example = "12345"
             )
-            @PathVariable String mediaId
-    ) {
-        likedService.addLiked(mediaId);
+            @PathVariable String mediaId,
+            @PathVariable String mediaType) {
+        likedService.addLiked(mediaId, mediaType);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete/{mediaId}")
+    @DeleteMapping("/delete/{mediaId}/{mediaType}")
     @Operation(
             summary = "Remove media from liked",
             description = "Removes a media item from the current user's liked list"
@@ -86,9 +96,9 @@ public class LikedController {
                     required = true,
                     example = "12345"
             )
-            @PathVariable String mediaId
-    ) {
-        likedService.deleteLiked(mediaId);
+            @PathVariable String mediaId,
+            @PathVariable String mediaType) {
+        likedService.deleteLiked(mediaId, mediaType);
         return ResponseEntity.ok().build();
     }
 
