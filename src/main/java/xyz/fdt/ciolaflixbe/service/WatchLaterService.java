@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import xyz.fdt.ciolaflixbe.model.CiolaMan;
 import xyz.fdt.ciolaflixbe.repo.CiolaRepo;
 import xyz.fdt.ciolaflixbe.repo.WatchLaterRepo;
+import xyz.fdt.ciolaflixbe.exception.user.UserNotFoundException;
 
 import java.util.Optional;
 
@@ -21,9 +22,8 @@ public class WatchLaterService {
 
     public void addWatchLater(String mediaId){
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
-        Optional<CiolaMan> ciolaMan = ciolaRepo.findById(currentUserId);
-
-
+        CiolaMan ciolaMan = ciolaRepo.findById(currentUserId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + currentUserId));
     }
 
     public void deleteWatchLater(String mediaId){

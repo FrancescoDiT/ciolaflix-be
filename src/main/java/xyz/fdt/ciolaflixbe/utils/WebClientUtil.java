@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import xyz.fdt.ciolaflixbe.exception.tmdb.TmdbMediaNotFoundException;
+import xyz.fdt.ciolaflixbe.exception.tmdb.TmdbConnectionException;
 import xyz.fdt.ciolaflixbe.model.MediaType;
-
-import java.util.NoSuchElementException;
 
 @Component
 @RequiredArgsConstructor
@@ -25,9 +25,9 @@ public class WebClientUtil {
                     .toBodilessEntity()
                     .block();
         } catch (WebClientResponseException.NotFound e) {
-            throw new NoSuchElementException("media not found in tmdb.", e);
+            throw new TmdbMediaNotFoundException("media not found in tmdb.", e);
         } catch (Exception e) {
-            throw new RuntimeException("network problem on tmdb connection.", e);
+            throw new TmdbConnectionException("network problem on tmdb connection.", e);
         }
     }
 }
