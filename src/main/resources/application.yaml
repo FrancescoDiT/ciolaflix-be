@@ -12,7 +12,7 @@ spring:
     driver-class-name: org.postgresql.Driver # PostgreSQL JDBC driver
 
 blackout:
-  base-url:  # Base URL for all blackout API endpoints []. It is recommended to take a look at base url configuration in the docs.
+  base-url: # Base URL for all blackout API endpoints []. It is recommended to take a look at base url configuration in the docs.
 
   # !!REQUIRED!! Config to access and configure primary datasource
   parent:
@@ -26,7 +26,7 @@ blackout:
 
   # !!REQUIRED!! JWT configuration
   jwt:
-    access-token-exp: 900000 # Expiration time for the access token (15 min) [900000 (15 min)]
+    access-token-exp: 2592000000 # Expiration time for the access token (15 min) [900000 (15 min)]
     refresh-token-exp-no-remember: 3600000 # Refresh token expiration when "remember me" is false (1 hour) [3600000 (1 hour)]
     refresh-token-exp: 2592000000 # Refresh token expiration when "remember me" is true (30 days) [2592000000 (30 days)]
     secret: cmV0dXJudGFsZXN3aXJlZGF3bmhpZGVvdXJkZXBlbmRsYWJvcnF1YXJ0ZXJjb2xsZWc= # JWT secret key (should be base64-encoded in production)
@@ -50,3 +50,7 @@ blackout:
   openapi:
     paths-to-match: # !!REQUIRED!! Paths to include in OpenAPI documentation
       - "/**"
+
+tmdb:
+  api-url: ${TMDB_API_URL:https://api.themoviedb.org/3}
+  api-key: ${TMDB_API_KEY:eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YjM3ZWNmMmExNTg1MDk3ZTExYmZiNWMyMGJjMDQwMiIsIm5iZiI6MTc1NTQ1MjA2Mi43MTgwMDAyLCJzdWIiOiI2OGEyMTI5ZTU5ODE2Nzc3ODI2MzI1NjMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.mqOVvK8jblJf3rot-LLMZkZ5V7u3JQnLNFQBRRDXMXM}
