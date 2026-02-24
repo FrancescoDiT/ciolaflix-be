@@ -10,12 +10,11 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import xyz.fdt.ciolaflixbe.model.CiolaMan;
 import xyz.fdt.ciolaflixbe.model.Media;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -25,6 +24,9 @@ import java.util.Objects;
 })
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ContinueWatching {
 
     @EmbeddedId
@@ -41,19 +43,16 @@ public class ContinueWatching {
     private Media media;
 
     @Column(name = "playback_time", nullable = false)
-    private int currentTime;
+    private String currentTime;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    public ContinueWatching() {
-    }
+    private Instant updatedAt;
 
     @Builder
-    public ContinueWatching(CiolaMan user, Media media, int currentTime) {
+    public ContinueWatching(CiolaMan user, Media media, String currentTime) {
         this.user = user;
         this.media = media;
         this.currentTime = currentTime;
@@ -61,7 +60,7 @@ public class ContinueWatching {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now();
         if (this.id == null) {
             this.id = new ContinueWatchingId(
                 this.user != null ? this.user.getId() : null,
@@ -72,7 +71,7 @@ public class ContinueWatching {
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = Instant.now();
     }
 
     @Override

@@ -4,7 +4,13 @@ import it.trinex.blackout.security.BlackoutUserPrincipal;
 import it.trinex.blackout.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.fdt.ciolaflixbe.dto.LikedResponse;
+import xyz.fdt.ciolaflixbe.dto.request.MediaRequest;
+import xyz.fdt.ciolaflixbe.exception.liked.MediaAlreadyLikedException;
+import xyz.fdt.ciolaflixbe.exception.liked.MediaNotLikedException;
+import xyz.fdt.ciolaflixbe.exception.media.MediaNotFoundException;
+import xyz.fdt.ciolaflixbe.exception.user.UserNotFoundException;
 import xyz.fdt.ciolaflixbe.mapper.LikedMapper;
 import xyz.fdt.ciolaflixbe.model.CiolaMan;
 import xyz.fdt.ciolaflixbe.model.MediaType;
@@ -29,40 +35,48 @@ public class LikedService {
     private final LikedMapper likedMapper;
     private final WebClientUtil webClientUtil;
 
-    public void addLiked(String mediaId, String mediaType) {
+    /**
+     * Adds liked media; validates existence and uniqueness
+     */
+    @Transactional
+    public void addLiked(MediaRequest request) {
+        String mediaId = request.getMediaId();
+        String mediaType = request.getMediaType();
 
         webClientUtil.checkMediaExists(mediaId, MediaType.valueOf(mediaType.toUpperCase()));
 
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
 
         CiolaMan user = ciolaRepo.findById(currentUserId)
-                .orElseThrow(() -> new NoSuchElementException("User not found with id: " + currentUserId));
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + currentUserId));
 
         Media media = mediaRepo.findByTmdbIdAndMediaType(mediaId, MediaType.valueOf(mediaType.toUpperCase()))
-                .orElseGet(() -> createMedia(mediaId,MediaType.valueOf(mediaType.toUpperCase())));
+                .orElseGet(() -> createMedia(mediaId, MediaType.valueOf(mediaType.toUpperCase())));
 
         if (likedRepo.existsByCiolaManIdAndMediaId(user.getId(), media.getId())) {
-            throw new IllegalStateException("Media already liked by user");
+            throw new MediaAlreadyLikedException();
         }
 
         Liked liked = new Liked(user, media);
         likedRepo.save(liked);
     }
 
-    public void deleteLiked(String mediaId, String mediaType) {
+    public void deleteLiked(MediaRequest request) {
+        String mediaId = request.getMediaId();
+        String mediaType = request.getMediaType();
 
         webClientUtil.checkMediaExists(mediaId, MediaType.valueOf(mediaType.toUpperCase()));
 
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
 
         CiolaMan user = ciolaRepo.findById(currentUserId)
-                .orElseThrow(() -> new NoSuchElementException("User not found with id: " + currentUserId));
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + currentUserId));
 
         Media media = mediaRepo.findByTmdbIdAndMediaType(mediaId, MediaType.valueOf(mediaType.toUpperCase()))
-                .orElseThrow(() -> new NoSuchElementException("Media not found with id: " + mediaId + " and type: " + mediaType.toUpperCase()));
+                .orElseThrow(() -> new MediaNotFoundException("Media not found with id: " + mediaId + " and type: " + mediaType.toUpperCase()));
 
         if (!likedRepo.existsByCiolaManIdAndMediaId(user.getId(), media.getId())) {
-            throw new NoSuchElementException("Media not liked by user");
+            throw new MediaNotLikedException("Media not liked by user");
         }
 
         likedRepo.deleteByCiolaManIdAndMediaId(user.getId(), media.getId());

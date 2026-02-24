@@ -6,10 +6,10 @@ spring:
   application:
     name: ciolaflix-be # Application name
   datasource:
-    url: jdbc:postgresql://localhost:5432/ciolaflix # Primary database URL
-    username: root # Database username
-    password: root # Database password
-    driver-class-name: org.postgresql.Driver # PostgreSQL JDBC driver
+    url: jdbc:mariadb://m0s.net.bird:3306/ciolaflix # Primary database URL
+    username: ciolaflix # Database username
+    password: ciolaflix # Database password
+    driver-class-name: org.mariadb.jdbc.Driver # MariaDB JDBC driver
 
 blackout:
   base-url: # Base URL for all blackout API endpoints []. It is recommended to take a look at base url configuration in the docs.

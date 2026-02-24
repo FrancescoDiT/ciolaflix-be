@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.fdt.ciolaflixbe.dto.request.SignupRequest;
 import xyz.fdt.ciolaflixbe.model.CiolaMan;
 import xyz.fdt.ciolaflixbe.repo.CiolaRepo;
+import xyz.fdt.ciolaflixbe.exception.user.SignupException;
+import xyz.fdt.ciolaflixbe.exception.user.DuplicateEmailException;
 
 @Service
 @RequiredArgsConstructor
@@ -43,12 +45,16 @@ public class CiolaService {
 
             ciolaRepo.save(ciolaMan);
 
-        } catch (Exception e) {
-            // 3. Manual rollback: delete AuthAccount if User creation fails
+        } catch (IllegalArgumentException e) {
             if (authAccount != null && authAccount.getId() != null) {
                 authAccountRepo.deleteById(authAccount.getId());
             }
-            throw e; // Re-throw to let caller handle the error
+            throw new DuplicateEmailException(e.getMessage(), e);
+        } catch (Exception e) {
+            if (authAccount != null && authAccount.getId() != null) {
+                authAccountRepo.deleteById(authAccount.getId());
+            }
+            throw new SignupException(e.getMessage(), e);
         }
     }
 }
