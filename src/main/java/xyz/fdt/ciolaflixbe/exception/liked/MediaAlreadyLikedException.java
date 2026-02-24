@@ -6,10 +6,10 @@ import xyz.fdt.ciolaflixbe.exception.CiolaException;
 public class MediaAlreadyLikedException extends CiolaException {
 
     public MediaAlreadyLikedException(String message) {
-        super(message, HttpStatus.CONFLICT);
+        super(message, HttpStatus.BAD_REQUEST);
     }
 
     public MediaAlreadyLikedException() {
-        super("Media already liked by user.", HttpStatus.CONFLICT);
+        super("Media already liked by user.", HttpStatus.BAD_REQUEST);
     }
 }

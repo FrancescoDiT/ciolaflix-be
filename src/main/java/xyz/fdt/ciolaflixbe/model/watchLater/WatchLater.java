@@ -30,8 +30,8 @@ public class WatchLater {
 
     @ManyToOne
     @MapsId("userId")
-    @JoinColumn(name = "user_id", nullable = false)
-    private CiolaMan user;
+    @JoinColumn(name = "ciola_man", nullable = false)
+    private CiolaMan ciolaMan;
 
     @ManyToOne
     @MapsId("mediaId")
@@ -45,7 +45,7 @@ public class WatchLater {
     }
 
     public WatchLater(CiolaMan user, Media media) {
-        this.user = user;
+        this.ciolaMan = user;
         this.media = media;
     }
 
@@ -54,7 +54,7 @@ public class WatchLater {
         this.createdAt = LocalDateTime.now();
         if (this.id == null) {
             this.id = new WatchLaterId(
-                this.user != null ? this.user.getId() : null,
+                this.ciolaMan != null ? this.ciolaMan.getId() : null,
                 this.media != null ? this.media.getId() : null
             );
         }

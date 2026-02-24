@@ -6,6 +6,6 @@ import xyz.fdt.ciolaflixbe.exception.CiolaException;
 public class ContinueWatchingAlreadyExistsException extends CiolaException {
 
     public ContinueWatchingAlreadyExistsException(String message) {
-        super(message, HttpStatus.CONFLICT);
+        super(message, HttpStatus.BAD_REQUEST);
     }
 }

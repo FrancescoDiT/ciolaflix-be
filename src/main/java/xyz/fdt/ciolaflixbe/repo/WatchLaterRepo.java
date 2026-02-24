@@ -11,11 +11,11 @@ import java.util.Optional;
 @Repository
 public interface WatchLaterRepo extends JpaRepository<WatchLater, WatchLaterId> {
 
-    List<WatchLater> findByUserId(Long userId);
+    List<WatchLater> findByCiolaManId(Long userId);
 
-    Optional<WatchLater> findByUserIdAndMediaId(Long userId, Long mediaId);
+    Optional<WatchLater> findByCiolaManIdAndMediaId(Long userId, Long mediaId);
 
-    boolean existsByUserIdAndMediaId(Long userId, Long mediaId);
+    boolean existsByCiolaManIdAndMediaId(Long userId, Long mediaId);
 
-    void deleteByUserIdAndMediaId(Long userId, Long mediaId);
+    void deleteByCiolaManIdAndMediaId(Long userId, Long mediaId);
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.fdt.ciolaflixbe.dto.LikedResponse;
+import xyz.fdt.ciolaflixbe.dto.request.MediaRequest;
 import xyz.fdt.ciolaflixbe.exception.liked.MediaAlreadyLikedException;
 import xyz.fdt.ciolaflixbe.exception.liked.MediaNotLikedException;
 import xyz.fdt.ciolaflixbe.exception.media.MediaNotFoundException;
@@ -38,7 +39,9 @@ public class LikedService {
      * Adds liked media; validates existence and uniqueness
      */
     @Transactional
-    public void addLiked(String mediaId, String mediaType) {
+    public void addLiked(MediaRequest request) {
+        String mediaId = request.getMediaId();
+        String mediaType = request.getMediaType();
 
         webClientUtil.checkMediaExists(mediaId, MediaType.valueOf(mediaType.toUpperCase()));
 
@@ -48,7 +51,7 @@ public class LikedService {
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + currentUserId));
 
         Media media = mediaRepo.findByTmdbIdAndMediaType(mediaId, MediaType.valueOf(mediaType.toUpperCase()))
-                .orElseGet(() -> createMedia(mediaId,MediaType.valueOf(mediaType.toUpperCase())));
+                .orElseGet(() -> createMedia(mediaId, MediaType.valueOf(mediaType.toUpperCase())));
 
         if (likedRepo.existsByCiolaManIdAndMediaId(user.getId(), media.getId())) {
             throw new MediaAlreadyLikedException();
@@ -58,7 +61,9 @@ public class LikedService {
         likedRepo.save(liked);
     }
 
-    public void deleteLiked(String mediaId, String mediaType) {
+    public void deleteLiked(MediaRequest request) {
+        String mediaId = request.getMediaId();
+        String mediaType = request.getMediaType();
 
         webClientUtil.checkMediaExists(mediaId, MediaType.valueOf(mediaType.toUpperCase()));
 

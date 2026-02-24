@@ -1,19 +1,21 @@
 package xyz.fdt.ciolaflixbe.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import xyz.fdt.ciolaflixbe.dto.request.MediaRequest;
 import xyz.fdt.ciolaflixbe.service.WatchLaterService;
 
 @RestController
@@ -23,19 +25,19 @@ import xyz.fdt.ciolaflixbe.service.WatchLaterService;
 public class WatchLaterController {
     private final WatchLaterService watchLaterService;
 
-    @PostMapping("/add/{mediaId}")
+    @PostMapping("/add")
     @Operation(
             summary = "Add media to watch later",
             description = "Adds a media item to the current user's watch later list."
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "204",
                     description = "Media added successfully to watch later list"
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Media already in watch later list",
+                    description = "Media already in watch later list or invalid request",
                     content = @Content(schema = @Schema(implementation = String.class))
             ),
             @ApiResponse(
@@ -54,26 +56,25 @@ public class WatchLaterController {
                     content = @Content(schema = @Schema(implementation = String.class))
             )
     })
-    public ResponseEntity<Void> addWatchLater(
-            @Parameter(
-                    description = "TMDB media identifier",
-                    required = true,
-                    example = "12345"
-            )
-            @PathVariable String mediaId){
-        watchLaterService.addWatchLater(mediaId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> addWatchLater(@RequestBody @Valid MediaRequest request) {
+        watchLaterService.addWatchLater(request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @DeleteMapping("/delete/{mediaId}")
+    @DeleteMapping("/delete")
     @Operation(
             summary = "Remove media from watch later",
             description = "Removes a media item from the current user's watch later list."
     )
     @ApiResponses({
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "204",
                     description = "Media removed successfully from watch later list"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request",
+                    content = @Content(schema = @Schema(implementation = String.class))
             ),
             @ApiResponse(
                     responseCode = "401",
@@ -84,16 +85,15 @@ public class WatchLaterController {
                     responseCode = "404",
                     description = "Media not found in watch later list",
                     content = @Content(schema = @Schema(implementation = String.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = String.class))
             )
     })
-    public ResponseEntity<Void> deleteWatchLater(
-            @Parameter(
-                    description = "TMDB media identifier",
-                    required = true,
-                    example = "12345"
-            )
-            @PathVariable String mediaId){
-        watchLaterService.deleteWatchLater(mediaId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> deleteWatchLater(@RequestBody @Valid MediaRequest request) {
+        watchLaterService.deleteWatchLater(request);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -6,10 +6,10 @@ import xyz.fdt.ciolaflixbe.exception.CiolaException;
 public class TmdbConnectionException extends CiolaException {
 
     public TmdbConnectionException(String message) {
-        super(message, HttpStatus.BAD_GATEWAY);
+        super(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     public TmdbConnectionException(String message, Throwable cause) {
-        super(message, HttpStatus.BAD_GATEWAY, cause);
+        super(message, HttpStatus.INTERNAL_SERVER_ERROR, cause);
     }
 }

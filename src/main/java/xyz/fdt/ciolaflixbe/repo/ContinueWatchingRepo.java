@@ -1,10 +1,15 @@
 package xyz.fdt.ciolaflixbe.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import xyz.fdt.ciolaflixbe.model.continueWatching.ContinueWatching;
 import xyz.fdt.ciolaflixbe.model.continueWatching.ContinueWatchingId;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +23,5 @@ public interface ContinueWatchingRepo extends JpaRepository<ContinueWatching, Co
     boolean existsByUserIdAndMediaId(Long userId, Long mediaId);
 
     void deleteByUserIdAndMediaId(Long userId, Long mediaId);
+
 }
