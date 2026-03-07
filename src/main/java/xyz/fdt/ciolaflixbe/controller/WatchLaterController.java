@@ -11,12 +11,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.fdt.ciolaflixbe.dto.request.MediaRequest;
+import xyz.fdt.ciolaflixbe.dto.request.MediaRequestDTO;
+import xyz.fdt.ciolaflixbe.dto.response.MediaAndTypeDTO;
 import xyz.fdt.ciolaflixbe.service.WatchLaterService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/watchlater")
@@ -56,7 +60,7 @@ public class WatchLaterController {
                     content = @Content(schema = @Schema(implementation = String.class))
             )
     })
-    public ResponseEntity<Void> addWatchLater(@RequestBody @Valid MediaRequest request) {
+    public ResponseEntity<Void> addWatchLater(@RequestBody @Valid MediaRequestDTO request) {
         watchLaterService.addWatchLater(request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -92,8 +96,33 @@ public class WatchLaterController {
                     content = @Content(schema = @Schema(implementation = String.class))
             )
     })
-    public ResponseEntity<Void> deleteWatchLater(@RequestBody @Valid MediaRequest request) {
+    public ResponseEntity<Void> deleteWatchLater(@RequestBody @Valid MediaRequestDTO request) {
         watchLaterService.deleteWatchLater(request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping
+    @Operation(
+            summary = "Get watch later list",
+            description = "Retrieves the list of media in the current user's watch later list."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Watch later list retrieved successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized - user not authenticated",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal server error",
+                    content = @Content(schema = @Schema(implementation = String.class))
+            )
+    })
+    public ResponseEntity<List<MediaAndTypeDTO>> getWatchLater() {
+        return ResponseEntity.ok(watchLaterService.getWatchLater());
     }
 }

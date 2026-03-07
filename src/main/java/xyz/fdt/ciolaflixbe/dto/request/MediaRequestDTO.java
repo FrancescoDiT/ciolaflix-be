@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "Media action request")
-public class MediaRequest {
+public class MediaRequestDTO {
 
     @Schema(
             description = "TMDB media identifier",

@@ -16,12 +16,12 @@ import java.util.Optional;
 @Repository
 public interface ContinueWatchingRepo extends JpaRepository<ContinueWatching, ContinueWatchingId> {
 
-    List<ContinueWatching> findByUserIdOrderByUpdatedAtDesc(Long userId);
+    List<ContinueWatching> findByCiolaManIdOrderByUpdatedAtDesc(Long userId);
 
-    Optional<ContinueWatching> findByUserIdAndMediaId(Long userId, Long mediaId);
+    Optional<ContinueWatching> findByCiolaManIdAndMediaId(Long userId, Long mediaId);
 
-    boolean existsByUserIdAndMediaId(Long userId, Long mediaId);
+    boolean existsByCiolaManIdAndMediaId(Long userId, Long mediaId);
 
-    void deleteByUserIdAndMediaId(Long userId, Long mediaId);
+    void deleteByCiolaManIdAndMediaId(Long userId, Long mediaId);
 
 }

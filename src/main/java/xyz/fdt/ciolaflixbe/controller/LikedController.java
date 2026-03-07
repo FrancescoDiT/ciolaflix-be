@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.fdt.ciolaflixbe.dto.LikedResponse;
-import xyz.fdt.ciolaflixbe.dto.request.MediaRequest;
+import xyz.fdt.ciolaflixbe.dto.request.MediaRequestDTO;
+import xyz.fdt.ciolaflixbe.dto.response.MediaAndTypeDTO;
 import xyz.fdt.ciolaflixbe.service.LikedService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/liked")
@@ -59,7 +61,7 @@ public class LikedController {
                     content = @Content(schema = @Schema(implementation = String.class))
             )
     })
-    public ResponseEntity<Void> addLiked(@RequestBody @Valid MediaRequest request) {
+    public ResponseEntity<Void> addLiked(@RequestBody @Valid MediaRequestDTO request) {
         likedService.addLiked(request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -95,7 +97,7 @@ public class LikedController {
                     content = @Content(schema = @Schema(implementation = String.class))
             )
     })
-    public ResponseEntity<Void> deleteLiked(@RequestBody @Valid MediaRequest request) {
+    public ResponseEntity<Void> deleteLiked(@RequestBody @Valid MediaRequestDTO request) {
         likedService.deleteLiked(request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -109,7 +111,7 @@ public class LikedController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Successfully retrieved liked media list",
-                    content = @Content(schema = @Schema(implementation = LikedResponse.class))
+                    content = @Content(schema = @Schema(implementation = List.class))
             ),
             @ApiResponse(
                     responseCode = "401",
@@ -122,8 +124,8 @@ public class LikedController {
                     content = @Content(schema = @Schema(implementation = String.class))
             )
     })
-    public ResponseEntity<LikedResponse> getLiked() {
-        LikedResponse response = likedService.getLikedMediaIds();
+    public ResponseEntity<List<MediaAndTypeDTO>> getLiked() {
+        List<MediaAndTypeDTO> response = likedService.getLikedMediaIds();
         return ResponseEntity.ok(response);
     }
 }

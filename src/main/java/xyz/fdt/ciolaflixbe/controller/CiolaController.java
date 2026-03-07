@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.fdt.ciolaflixbe.dto.request.SignupRequest;
+import xyz.fdt.ciolaflixbe.dto.request.SignupRequestDTO;
 import xyz.fdt.ciolaflixbe.service.CiolaService;
 
 @RestController
@@ -40,7 +40,7 @@ public class CiolaController {
             content = @Content(schema = @Schema(implementation = String.class))
         )
     })
-    public ResponseEntity<Void> signUp(@RequestBody @Valid SignupRequest request){
+    public ResponseEntity<Void> signUp(@RequestBody @Valid SignupRequestDTO request){
         ciolaService.signup(request);
         return ResponseEntity.ok().build();
     }

@@ -6,8 +6,7 @@ import it.trinex.blackout.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import xyz.fdt.ciolaflixbe.dto.request.SignupRequest;
+import xyz.fdt.ciolaflixbe.dto.request.SignupRequestDTO;
 import xyz.fdt.ciolaflixbe.model.CiolaMan;
 import xyz.fdt.ciolaflixbe.repo.CiolaRepo;
 import xyz.fdt.ciolaflixbe.exception.user.SignupException;
@@ -21,7 +20,7 @@ public class CiolaService {
     private final PasswordEncoder passwordEncoder;
     private final CiolaRepo ciolaRepo; // Your business repository
 
-    public void signup(SignupRequest request) {
+    public void signup(SignupRequestDTO request) {
         AuthAccount authAccount = null;
 
         try {

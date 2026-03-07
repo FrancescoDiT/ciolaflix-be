@@ -1,78 +1,57 @@
 package xyz.fdt.ciolaflixbe.model.continueWatching;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import xyz.fdt.ciolaflixbe.model.CiolaMan;
 import xyz.fdt.ciolaflixbe.model.Media;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "continue_watching", uniqueConstraints = {
-    @UniqueConstraint(name = "uk_continue_watching_user_media", columnNames = {"user_id", "media_id"})
+    @UniqueConstraint(name = "uk_continue_watching_user_media", columnNames = {"ciola_man_id", "media_id"})
 })
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class ContinueWatching {
 
     @EmbeddedId
-    private ContinueWatchingId id;
+    private ContinueWatchingId id = new ContinueWatchingId();
 
     @ManyToOne
-    @MapsId("userId")
-    @JoinColumn(name = "user_id", nullable = false)
-    private CiolaMan user;
+    @MapsId("ciolaManId")
+    @JoinColumn(name = "ciola_man_id")
+    private CiolaMan ciolaMan;
 
     @ManyToOne
     @MapsId("mediaId")
-    @JoinColumn(name = "media_id", nullable = false)
+    @JoinColumn(name = "media_id")
     private Media media;
 
     @Column(name = "playback_time", nullable = false)
     private String currentTime;
 
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @Builder
-    public ContinueWatching(CiolaMan user, Media media, String currentTime) {
-        this.user = user;
+    public ContinueWatching(CiolaMan ciolaMan, Media media, String currentTime) {
+        this.ciolaMan = ciolaMan;
         this.media = media;
         this.currentTime = currentTime;
+        this.id = new ContinueWatchingId(ciolaMan != null ? ciolaMan.getId() : null, media != null ? media.getId() : null);
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = Instant.now();
-        if (this.id == null) {
-            this.id = new ContinueWatchingId(
-                this.user != null ? this.user.getId() : null,
-                this.media != null ? this.media.getId() : null
-            );
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = Instant.now();
-    }
 
     @Override
     public boolean equals(Object o) {
