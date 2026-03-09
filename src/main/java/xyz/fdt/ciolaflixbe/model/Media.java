@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import org.hibernate.annotations.JdbcTypeCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,8 +19,6 @@ import xyz.fdt.ciolaflixbe.model.liked.Liked;
 import xyz.fdt.ciolaflixbe.model.watchLater.WatchLater;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -36,8 +33,6 @@ public class Media {
     private Long id;
     @Column(nullable = false, unique = true)
     private String tmdbId;
-    @JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
-    private Map<String, List<String>> seasonsEpisodes;
 
     private MediaType mediaType;
 

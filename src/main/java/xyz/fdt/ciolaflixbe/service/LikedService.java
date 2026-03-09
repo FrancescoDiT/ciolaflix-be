@@ -42,7 +42,7 @@ public class LikedService {
         String mediaId = request.getMediaId();
         String mediaType = request.getMediaType();
 
-        webClientUtil.checkMediaExists(mediaId, MediaType.fromString(mediaType));
+        webClientUtil.checkIfMediaExistsOnTMDB(mediaId, MediaType.fromString(mediaType));
 
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
 
@@ -65,7 +65,7 @@ public class LikedService {
         String mediaId = request.getMediaId();
         String mediaType = request.getMediaType();
 
-        webClientUtil.checkMediaExists(mediaId, MediaType.fromString(mediaType));
+        webClientUtil.checkIfMediaExistsOnTMDB(mediaId, MediaType.fromString(mediaType));
 
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
 

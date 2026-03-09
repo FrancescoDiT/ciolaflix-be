@@ -38,7 +38,7 @@ public class WatchLaterService {
         String mediaId = request.getMediaId();
         String mediaType = request.getMediaType();
 
-        webClientUtil.checkMediaExists(mediaId, MediaType.fromString(mediaType));
+        webClientUtil.checkIfMediaExistsOnTMDB(mediaId, MediaType.fromString(mediaType));
 
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
 
@@ -61,7 +61,7 @@ public class WatchLaterService {
         String mediaId = request.getMediaId();
         String mediaType = request.getMediaType();
 
-        webClientUtil.checkMediaExists(mediaId, MediaType.fromString(mediaType));
+        webClientUtil.checkIfMediaExistsOnTMDB(mediaId, MediaType.fromString(mediaType));
 
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
 

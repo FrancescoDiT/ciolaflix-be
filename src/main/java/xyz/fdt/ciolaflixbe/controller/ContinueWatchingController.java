@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import xyz.fdt.ciolaflixbe.dto.request.ContinueWatchingRequestDTO;
 import xyz.fdt.ciolaflixbe.dto.request.MediaRequestDTO;
-import xyz.fdt.ciolaflixbe.dto.response.MediaAndTypeDTO;
+import xyz.fdt.ciolaflixbe.dto.response.ContinueWatchingResponse;
 import xyz.fdt.ciolaflixbe.service.ContinueWatchingService;
 
 import java.util.List;
@@ -61,7 +62,7 @@ public class ContinueWatchingController {
                     content = @Content(schema = @Schema(implementation = String.class))
             )
     })
-    public ResponseEntity<Void> addContinueWatching(@RequestBody @Valid MediaRequestDTO request) {
+    public ResponseEntity<Void> addContinueWatching(@RequestBody @Valid ContinueWatchingRequestDTO request) {
         continueWatchingService.addContinueWatching(request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -124,8 +125,8 @@ public class ContinueWatchingController {
                     content = @Content(schema = @Schema(implementation = String.class))
             )
     })
-    public ResponseEntity<List<MediaAndTypeDTO>> getContinueWatching() {
-        List<MediaAndTypeDTO> response = continueWatchingService.getContinueWatching();
+    public ResponseEntity<List<ContinueWatchingResponse>> getContinueWatching() {
+        List<ContinueWatchingResponse> response = continueWatchingService.getContinueWatching();
         return ResponseEntity.ok(response);
     }
 }

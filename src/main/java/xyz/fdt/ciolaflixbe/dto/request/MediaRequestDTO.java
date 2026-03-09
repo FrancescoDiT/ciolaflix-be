@@ -26,6 +26,4 @@ public class MediaRequestDTO {
     @NotBlank(message = "Media type is required")
     @Pattern(regexp = "^(?i)(MOVIE|TV)$", message = "Media type must be either MOVIE or TV")
     private String mediaType;
-
-    private String timestamp;
 }

@@ -5,9 +5,11 @@ import it.trinex.blackout.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.fdt.ciolaflixbe.dto.request.ContinueWatchingRequestDTO;
 import xyz.fdt.ciolaflixbe.dto.request.MediaRequestDTO;
-import xyz.fdt.ciolaflixbe.dto.response.MediaAndTypeDTO;
+import xyz.fdt.ciolaflixbe.dto.response.ContinueWatchingResponse;
 import xyz.fdt.ciolaflixbe.exception.continuewatching.ContinueWatchingNotFoundException;
+import xyz.fdt.ciolaflixbe.exception.continuewatching.MovieCannotHaveSeasonsOrEpisodesException;
 import xyz.fdt.ciolaflixbe.exception.media.MediaNotFoundException;
 import xyz.fdt.ciolaflixbe.exception.user.UserNotFoundException;
 import xyz.fdt.ciolaflixbe.mapper.ContinueWatchingMapper;
@@ -37,11 +39,25 @@ public class ContinueWatchingService {
      * Adds or updates a continue watching entry.
      */
     @Transactional
-    public void addContinueWatching(MediaRequestDTO request) {
+    public void addContinueWatching(ContinueWatchingRequestDTO request) {
         String mediaId = request.getMediaId();
         String mediaType = request.getMediaType();
 
-        webClientUtil.checkMediaExists(mediaId, MediaType.fromString(mediaType));
+        if (MediaType.MOVIE == MediaType.fromString(request.getMediaType())){
+           if (request.getSeasonId() != null || request.getEpisodeId() != null) {
+               throw new MovieCannotHaveSeasonsOrEpisodesException("Movie media type cannot have seasons or episodes");
+           }
+            webClientUtil.checkIfMediaExistsOnTMDB(mediaId, MediaType.fromString(mediaType));
+        }
+
+        int seasonId = request.getSeasonId() != null ? request.getSeasonId() : 0;
+        int episodeId = request.getEpisodeId() != null ? request.getEpisodeId() : 0;
+
+        if(MediaType.TV == MediaType.fromString(request.getMediaType())){
+            webClientUtil.checkIfMediaExistsOnTMDB(mediaId,
+                seasonId,
+                episodeId);
+        }
 
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
         CiolaMan user = ciolaRepo.findById(currentUserId)
@@ -51,9 +67,12 @@ public class ContinueWatchingService {
                 .orElseGet(() -> createMedia(mediaId, MediaType.fromString(mediaType)));
 
         ContinueWatching continueWatching = continueWatchingRepo.findByCiolaManIdAndMediaId(user.getId(), media.getId())
-                .orElse(new ContinueWatching(user, media, request.getTimestamp()));
+                .orElse(new ContinueWatching(user, media,
+                    seasonId,
+                    episodeId));
 
-        continueWatching.setCurrentTime(request.getTimestamp());
+        continueWatching.setCurrentTime(request.getCurrentTime());
+
         continueWatchingRepo.save(continueWatching);
     }
 
@@ -62,7 +81,7 @@ public class ContinueWatchingService {
         String mediaId = request.getMediaId();
         String mediaType = request.getMediaType();
 
-        webClientUtil.checkMediaExists(mediaId, MediaType.fromString(mediaType));
+        webClientUtil.checkIfMediaExistsOnTMDB(mediaId, MediaType.fromString(mediaType));
 
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
         CiolaMan user = ciolaRepo.findById(currentUserId)
@@ -78,12 +97,12 @@ public class ContinueWatchingService {
         continueWatchingRepo.deleteByCiolaManIdAndMediaId(user.getId(), media.getId());
     }
 
-    public List<MediaAndTypeDTO> getContinueWatching() {
+    public List<ContinueWatchingResponse> getContinueWatching() {
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
 
         List<ContinueWatching> continueWatchingList = continueWatchingRepo.findByCiolaManIdOrderByUpdatedAtDesc(currentUserId);
 
-        return continueWatchingMapper.toContinueWatchingMediaDTOList(continueWatchingList);
+        return continueWatchingMapper.toContinueWatchingResponseList(continueWatchingList);
     }
 
     private Media createMedia(String tmdbId, MediaType mediaType) {

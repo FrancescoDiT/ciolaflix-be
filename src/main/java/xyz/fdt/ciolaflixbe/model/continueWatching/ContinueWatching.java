@@ -35,7 +35,13 @@ public class ContinueWatching {
     private Media media;
 
     @Column(name = "playback_time", nullable = false)
-    private String currentTime;
+    private Integer currentTime;
+
+    @Column(name = "season_id", nullable = true)
+    private Integer seasonId;
+
+    @Column(name = "episode_id", nullable = true)
+    private Integer episodeId;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -45,10 +51,11 @@ public class ContinueWatching {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    public ContinueWatching(CiolaMan ciolaMan, Media media, String currentTime) {
+    public ContinueWatching(CiolaMan ciolaMan, Media media, int seasonId, int episodeId) {
         this.ciolaMan = ciolaMan;
         this.media = media;
-        this.currentTime = currentTime;
+        this.seasonId = seasonId;
+        this.episodeId = episodeId;
         this.id = new ContinueWatchingId(ciolaMan != null ? ciolaMan.getId() : null, media != null ? media.getId() : null);
     }
 
