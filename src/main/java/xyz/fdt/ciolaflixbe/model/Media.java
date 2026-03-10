@@ -33,12 +33,16 @@ public class Media {
     private Long id;
     @Column(nullable = false, unique = true)
     private String tmdbId;
-    private String seasonId;
-    private String episodeid;
 
     private MediaType mediaType;
 
     @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Liked> liked = new HashSet<>();
+
+    @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<ContinueWatching> continueWatchings = new HashSet<>();
+
+    @OneToMany(mappedBy = "media", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<WatchLater> watchLaters = new HashSet<>();
 
 }

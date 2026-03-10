@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "User registration request")
-public class SignupRequest {
+public class SignupRequestDTO {
     @Schema(description = "User email address", example = "user@example.com", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be valid")

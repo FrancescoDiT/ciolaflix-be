@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Schema(description = "Media action request")
-public class MediaRequest {
+public class MediaRequestDTO {
 
     @Schema(
             description = "TMDB media identifier",
@@ -26,6 +26,4 @@ public class MediaRequest {
     @NotBlank(message = "Media type is required")
     @Pattern(regexp = "^(?i)(MOVIE|TV)$", message = "Media type must be either MOVIE or TV")
     private String mediaType;
-
-    private String timestamp;
 }

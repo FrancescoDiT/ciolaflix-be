@@ -14,7 +14,7 @@ public class WebClientUtil {
 
     private final WebClient tmdbWebClient;
 
-    public void checkMediaExists(String mediaId, MediaType mediaType) {
+    public void checkIfMediaExistsOnTMDB(String mediaId, MediaType mediaType) {
 
         String endpoint = MediaType.MOVIE.equals(mediaType) ? "/movie/" : "/tv/";
 
@@ -24,6 +24,23 @@ public class WebClientUtil {
                     .retrieve()
                     .toBodilessEntity()
                     .block();
+        } catch (WebClientResponseException.NotFound e) {
+            throw new TmdbMediaNotFoundException("media not found in tmdb.", e);
+        } catch (Exception e) {
+            throw new TmdbConnectionException("network problem on tmdb connection.", e);
+        }
+    }
+
+    public void checkIfMediaExistsOnTMDB(String mediaId, Integer seasonId, Integer episodeId) {
+
+        String endpoint = "/tv/" + mediaId + "/season/" + seasonId + "/episode/" + episodeId;
+
+        try {
+            tmdbWebClient.get()
+                .uri(endpoint)
+                .retrieve()
+                .toBodilessEntity()
+                .block();
         } catch (WebClientResponseException.NotFound e) {
             throw new TmdbMediaNotFoundException("media not found in tmdb.", e);
         } catch (Exception e) {

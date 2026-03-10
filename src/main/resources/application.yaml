@@ -1,4 +1,5 @@
 server:
+  port: 8080
   servlet:
     context-path: /api
 
@@ -6,10 +7,10 @@ spring:
   application:
     name: ciolaflix-be # Application name
   datasource:
-    url: jdbc:mariadb://m0s.net.bird:3306/ciolaflix # Primary database URL
-    username: ciolaflix # Database username
-    password: ciolaflix # Database password
-    driver-class-name: org.mariadb.jdbc.Driver # MariaDB JDBC driver
+    url: jdbc:postgresql://localhost:5432/ciolaflix # Primary database URL
+    username: root # Database username
+    password: root # Database password
+    driver-class-name: org.postgresql.Driver # MariaDB JDBC driver
 
 blackout:
   base-url: # Base URL for all blackout API endpoints []. It is recommended to take a look at base url configuration in the docs.
@@ -54,3 +55,6 @@ blackout:
 tmdb:
   api-url: ${TMDB_API_URL:https://api.themoviedb.org/3}
   api-key: ${TMDB_API_KEY:eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YjM3ZWNmMmExNTg1MDk3ZTExYmZiNWMyMGJjMDQwMiIsIm5iZiI6MTc1NTQ1MjA2Mi43MTgwMDAyLCJzdWIiOiI2OGEyMTI5ZTU5ODE2Nzc3ODI2MzI1NjMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.mqOVvK8jblJf3rot-LLMZkZ5V7u3JQnLNFQBRRDXMXM}
+
+cors:
+  origin: "http://localhost:5173"

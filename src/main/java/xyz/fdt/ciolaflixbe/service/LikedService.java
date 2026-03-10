@@ -5,8 +5,8 @@ import it.trinex.blackout.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.fdt.ciolaflixbe.dto.LikedResponse;
-import xyz.fdt.ciolaflixbe.dto.request.MediaRequest;
+import xyz.fdt.ciolaflixbe.dto.response.MediaAndTypeDTO;
+import xyz.fdt.ciolaflixbe.dto.request.MediaRequestDTO;
 import xyz.fdt.ciolaflixbe.exception.liked.MediaAlreadyLikedException;
 import xyz.fdt.ciolaflixbe.exception.liked.MediaNotLikedException;
 import xyz.fdt.ciolaflixbe.exception.media.MediaNotFoundException;
@@ -22,7 +22,6 @@ import xyz.fdt.ciolaflixbe.repo.MediaRepo;
 import xyz.fdt.ciolaflixbe.utils.WebClientUtil;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -39,19 +38,19 @@ public class LikedService {
      * Adds liked media; validates existence and uniqueness
      */
     @Transactional
-    public void addLiked(MediaRequest request) {
+    public void addLiked(MediaRequestDTO request) {
         String mediaId = request.getMediaId();
         String mediaType = request.getMediaType();
 
-        webClientUtil.checkMediaExists(mediaId, MediaType.valueOf(mediaType.toUpperCase()));
+        webClientUtil.checkIfMediaExistsOnTMDB(mediaId, MediaType.fromString(mediaType));
 
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
 
         CiolaMan user = ciolaRepo.findById(currentUserId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + currentUserId));
 
-        Media media = mediaRepo.findByTmdbIdAndMediaType(mediaId, MediaType.valueOf(mediaType.toUpperCase()))
-                .orElseGet(() -> createMedia(mediaId, MediaType.valueOf(mediaType.toUpperCase())));
+        Media media = mediaRepo.findByTmdbIdAndMediaType(mediaId, MediaType.fromString(mediaType))
+                .orElseGet(() -> createMedia(mediaId, MediaType.fromString(mediaType)));
 
         if (likedRepo.existsByCiolaManIdAndMediaId(user.getId(), media.getId())) {
             throw new MediaAlreadyLikedException();
@@ -61,18 +60,19 @@ public class LikedService {
         likedRepo.save(liked);
     }
 
-    public void deleteLiked(MediaRequest request) {
+    @Transactional
+    public void deleteLiked(MediaRequestDTO request) {
         String mediaId = request.getMediaId();
         String mediaType = request.getMediaType();
 
-        webClientUtil.checkMediaExists(mediaId, MediaType.valueOf(mediaType.toUpperCase()));
+        webClientUtil.checkIfMediaExistsOnTMDB(mediaId, MediaType.fromString(mediaType));
 
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
 
         CiolaMan user = ciolaRepo.findById(currentUserId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + currentUserId));
 
-        Media media = mediaRepo.findByTmdbIdAndMediaType(mediaId, MediaType.valueOf(mediaType.toUpperCase()))
+        Media media = mediaRepo.findByTmdbIdAndMediaType(mediaId, MediaType.fromString(mediaType))
                 .orElseThrow(() -> new MediaNotFoundException("Media not found with id: " + mediaId + " and type: " + mediaType.toUpperCase()));
 
         if (!likedRepo.existsByCiolaManIdAndMediaId(user.getId(), media.getId())) {
@@ -82,15 +82,12 @@ public class LikedService {
         likedRepo.deleteByCiolaManIdAndMediaId(user.getId(), media.getId());
     }
 
-    public LikedResponse getLikedMediaIds() {
+    public List<MediaAndTypeDTO> getLikedMediaIds() {
         Long currentUserId = currentUserService.getCurrentPrincipal().getUserId();
 
         List<Liked> likedList = likedRepo.findByCiolaManId(currentUserId);
-        List<String> mediaIds = likedMapper.toMediaIdList(likedList);
 
-        return LikedResponse.builder()
-                .mediaIds(mediaIds)
-                .build();
+        return likedMapper.toMediaAndTypeDTOList(likedList);
     }
 
     private Media createMedia(String tmdbId, MediaType mediaType) {

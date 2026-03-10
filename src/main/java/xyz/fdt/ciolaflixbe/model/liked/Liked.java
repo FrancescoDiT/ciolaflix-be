@@ -1,17 +1,18 @@
 package xyz.fdt.ciolaflixbe.model.liked;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import xyz.fdt.ciolaflixbe.model.CiolaMan;
 import xyz.fdt.ciolaflixbe.model.Media;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.Instant;
 
@@ -41,10 +42,8 @@ public class Liked {
     @JoinColumn(name = "media_id")
     private Media media;
 
+    @CreationTimestamp
+    @Column(name = "liked_at", nullable = false, updatable = false)
     private Instant likedAt;
 
-    @PrePersist
-    public void onPersist() {
-        likedAt = Instant.now();
-    }
 }

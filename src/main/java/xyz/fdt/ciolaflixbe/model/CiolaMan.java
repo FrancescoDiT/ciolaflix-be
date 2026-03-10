@@ -41,6 +41,12 @@ public class CiolaMan {
     @OneToMany(mappedBy = "ciolaMan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Liked> liked = new HashSet<>();
 
+    @OneToMany(mappedBy = "ciolaMan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<ContinueWatching> continueWatchings = new HashSet<>();
+
+    @OneToMany(mappedBy = "ciolaMan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<WatchLater> watchLaters = new HashSet<>();
+
     @PreUpdate
     private void onUpdate() {
         this.updatedAt = Instant.now();
