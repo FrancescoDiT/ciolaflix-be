@@ -40,6 +40,7 @@ blackout:
       - "*"
     allowed-origins: # Allowed origins for CORS (use specific domains in production) [*]
       - "https://ciolaflix2-0.vercel.app/"
+      - "https://ciolaflix.francesco2003-fdt.workers.dev"
       - "https://ciolaflix.vercel.app"
       - "http://localhost:5173"
 
