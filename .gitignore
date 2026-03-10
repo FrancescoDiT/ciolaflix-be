@@ -14,6 +14,9 @@ target/
 .sts4-cache
 .metals
 
+.mvn
+
+
 lamerdajs
 
 ### IntelliJ IDEA ###
