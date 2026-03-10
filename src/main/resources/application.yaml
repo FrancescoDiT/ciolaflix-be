@@ -1,5 +1,4 @@
 server:
-  port: 8080
   servlet:
     context-path: /api
 
@@ -7,9 +6,9 @@ spring:
   application:
     name: ciolaflix-be # Application name
   datasource:
-    url: jdbc:postgresql://localhost:5432/ciolaflix # Primary database URL
-    username: root # Database username
-    password: root # Database password
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/ciolaflix} # Primary database URL
+    username: ${DB_USERNAME} # Database username
+    password: ${DB_PASSWORD} # Database password
     driver-class-name: org.postgresql.Driver # MariaDB JDBC driver
 
 blackout:
@@ -27,10 +26,10 @@ blackout:
 
   # !!REQUIRED!! JWT configuration
   jwt:
-    access-token-exp: 2592000000 # Expiration time for the access token (15 min) [900000 (15 min)]
-    refresh-token-exp-no-remember: 3600000 # Refresh token expiration when "remember me" is false (1 hour) [3600000 (1 hour)]
-    refresh-token-exp: 2592000000 # Refresh token expiration when "remember me" is true (30 days) [2592000000 (30 days)]
-    secret: cmV0dXJudGFsZXN3aXJlZGF3bmhpZGVvdXJkZXBlbmRsYWJvcnF1YXJ0ZXJjb2xsZWc= # JWT secret key (should be base64-encoded in production)
+    access-token-exp: ${JWT_ACCESS_TOKEN_EXP:2592000000} # Expiration time for the access token (15 min) [900000 (15 min)]
+    refresh-token-exp-no-remember: ${JWT_REFRESH_TOKEN_EXP_NO_REMEMBER:3600000} # Refresh token expiration when "remember me" is false (1 hour) [3600000 (1 hour)]
+    refresh-token-exp: ${JWT_REFRESH_TOKEN_EXP:2592000000} # Refresh token expiration when "remember me" is true (30 days) [2592000000 (30 days)]
+    secret: ${JWT_SECRET} # JWT secret key (should be base64-encoded in production)
 
   # CORS configuration
   cors:
@@ -46,6 +45,7 @@ blackout:
   filterchain:
     allowed:
       - /ciola/signup
+      - /ws
 
   # OpenAPI/Swagger configuration
   openapi:
@@ -54,7 +54,7 @@ blackout:
 
 tmdb:
   api-url: ${TMDB_API_URL:https://api.themoviedb.org/3}
-  api-key: ${TMDB_API_KEY:eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YjM3ZWNmMmExNTg1MDk3ZTExYmZiNWMyMGJjMDQwMiIsIm5iZiI6MTc1NTQ1MjA2Mi43MTgwMDAyLCJzdWIiOiI2OGEyMTI5ZTU5ODE2Nzc3ODI2MzI1NjMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.mqOVvK8jblJf3rot-LLMZkZ5V7u3JQnLNFQBRRDXMXM}
+  api-key: ${TMDB_API_KEY}
 
 cors:
-  origin: "http://localhost:5173"
+  origin: ${CORS_ORIGIN}
