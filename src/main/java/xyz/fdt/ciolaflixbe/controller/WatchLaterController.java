@@ -101,7 +101,7 @@ public class WatchLaterController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping
+    @GetMapping("/get")
     @Operation(
             summary = "Get watch later list",
             description = "Retrieves the list of media in the current user's watch later list."

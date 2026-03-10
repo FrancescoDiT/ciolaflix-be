@@ -103,7 +103,7 @@ public class ContinueWatchingController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping
+    @GetMapping("/get")
     @Operation(
             summary = "Get all continue watching media",
             description = "Retrieves a list of all media that the current user is watching"

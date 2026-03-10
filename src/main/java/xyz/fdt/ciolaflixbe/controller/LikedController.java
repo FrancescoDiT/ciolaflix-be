@@ -102,7 +102,7 @@ public class LikedController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping
+    @GetMapping("/get")
     @Operation(
             summary = "Get all liked media",
             description = "Retrieves a list of all media IDs that the current user has liked"

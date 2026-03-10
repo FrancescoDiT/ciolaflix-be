@@ -55,3 +55,6 @@ blackout:
 tmdb:
   api-url: ${TMDB_API_URL:https://api.themoviedb.org/3}
   api-key: ${TMDB_API_KEY:eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YjM3ZWNmMmExNTg1MDk3ZTExYmZiNWMyMGJjMDQwMiIsIm5iZiI6MTc1NTQ1MjA2Mi43MTgwMDAyLCJzdWIiOiI2OGEyMTI5ZTU5ODE2Nzc3ODI2MzI1NjMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.mqOVvK8jblJf3rot-LLMZkZ5V7u3JQnLNFQBRRDXMXM}
+
+cors:
+  origin: "http://localhost:5173"
