@@ -37,7 +37,11 @@ blackout:
     allowed-headers: # Allowed headers in CORS requests [*]
       - "*"
     allowed-methods: # Allowed HTTP methods in CORS requests [*]
-      - "*"
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
     allowed-origins: # Allowed origins for CORS (use specific domains in production) [*]
       - "https://ciolaflix.francescodit.dev"
       - "http://localhost:5173"
