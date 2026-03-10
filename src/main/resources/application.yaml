@@ -20,7 +20,7 @@ blackout:
       repository: xyz.fdt.ciolaflixbe.repo # JPA repositories package
       model: xyz.fdt.ciolaflixbe.model # JPA models package
       jpaProperties:
-        hibernate.hbm2ddl.auto: update # Hibernate DDL mode [update]
+        hibernate.hbm2ddl.auto: validate # Hibernate DDL mode [update]
         hibernate.format_sql: true # Format SQL queries [true]
         hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect # PostgreSQL dialect
 
@@ -56,5 +56,3 @@ tmdb:
   api-url: ${TMDB_API_URL:https://api.themoviedb.org/3}
   api-key: ${TMDB_API_KEY}
 
-cors:
-  origin: ${CORS_ORIGIN}
