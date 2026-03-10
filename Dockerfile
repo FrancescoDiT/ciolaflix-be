@@ -1,5 +1,7 @@
 FROM eclipse-temurin:25-jdk AS build
 
+LABEL org.opencontainers.image.source=https://github.com/FrancescoDiT/ciolaflix-be
+
 ARG GITHUB_USERNAME
 ARG GITHUB_TOKEN
 
