@@ -18,7 +18,7 @@ RUN mkdir -p /root/.m2 && \
     "$GITHUB_USERNAME" "$GITHUB_TOKEN" > /root/.m2/settings.xml
 
 # Download dependencies
-RUN ./mvnw dependency:go-offline -B
+RUN ./mvnw dependency:resolve -B
 
 # Copy source and build
 COPY src ./src
