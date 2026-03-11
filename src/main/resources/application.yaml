@@ -52,6 +52,7 @@ blackout:
     allowed:
       - /ciola/signup
       - /ws
+      - /tmdb
 
   # OpenAPI/Swagger configuration
   openapi:
