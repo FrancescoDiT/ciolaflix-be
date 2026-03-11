@@ -6,10 +6,10 @@ spring:
   application:
     name: ciolaflix-be # Application name
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/ciolaflix} # Primary database URL
+    url: ${DB_URL:jdbc:mariadb://m0s.net.bird:3306/ciolaflix} # Primary database URL
     username: ${DB_USERNAME} # Database username
     password: ${DB_PASSWORD} # Database password
-    driver-class-name: org.postgresql.Driver # MariaDB JDBC driver
+    driver-class-name: org.mariadb.jdbc.Driver
 
 blackout:
   base-url: # Base URL for all blackout API endpoints []. It is recommended to take a look at base url configuration in the docs.
@@ -20,9 +20,9 @@ blackout:
       repository: xyz.fdt.ciolaflixbe.repo # JPA repositories package
       model: xyz.fdt.ciolaflixbe.model # JPA models package
       jpaProperties:
-        hibernate.hbm2ddl.auto: validate # Hibernate DDL mode [update]
+        hibernate.hbm2ddl.auto: create # Hibernate DDL mode [update]
         hibernate.format_sql: true # Format SQL queries [true]
-        hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect # PostgreSQL dialect
+        hibernate.dialect: org.hibernate.dialect.MariaDBDialect # MariaDB dialect
 
   # !!REQUIRED!! JWT configuration
   jwt:
