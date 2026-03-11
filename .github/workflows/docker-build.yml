@@ -32,7 +32,9 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/francescodit/ciolaflix-be:latest
+          tags: |
+            ghcr.io/francescodit/ciolaflix-be:latest
+            ghcr.io/francescodit/ciolaflix-be:${{ github.sha }}
           build-args: |
             GITHUB_USERNAME=${{ secrets.PERSONAL_USERNAME }}
             GITHUB_TOKEN=${{ secrets.PERSONAL_TOKEN }}
