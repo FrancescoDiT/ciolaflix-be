@@ -1,5 +1,4 @@
 server:
-  port: 8080
   servlet:
     context-path: /api
 
@@ -7,10 +6,10 @@ spring:
   application:
     name: ciolaflix-be # Application name
   datasource:
-    url: jdbc:postgresql://localhost:5432/ciolaflix # Primary database URL
-    username: root # Database username
-    password: root # Database password
-    driver-class-name: org.postgresql.Driver # MariaDB JDBC driver
+    url: ${DB_URL:jdbc:mariadb://m0s.net.bird:3306/ciolaflix} # Primary database URL
+    username: ${DB_USERNAME} # Database username
+    password: ${DB_PASSWORD} # Database password
+    driver-class-name: org.mariadb.jdbc.Driver
 
 blackout:
   base-url: # Base URL for all blackout API endpoints []. It is recommended to take a look at base url configuration in the docs.
@@ -21,16 +20,16 @@ blackout:
       repository: xyz.fdt.ciolaflixbe.repo # JPA repositories package
       model: xyz.fdt.ciolaflixbe.model # JPA models package
       jpaProperties:
-        hibernate.hbm2ddl.auto: update # Hibernate DDL mode [update]
+        hibernate.hbm2ddl.auto: create # Hibernate DDL mode [update]
         hibernate.format_sql: true # Format SQL queries [true]
-        hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect # PostgreSQL dialect
+        hibernate.dialect: org.hibernate.dialect.MariaDBDialect # MariaDB dialect
 
   # !!REQUIRED!! JWT configuration
   jwt:
-    access-token-exp: 2592000000 # Expiration time for the access token (15 min) [900000 (15 min)]
-    refresh-token-exp-no-remember: 3600000 # Refresh token expiration when "remember me" is false (1 hour) [3600000 (1 hour)]
-    refresh-token-exp: 2592000000 # Refresh token expiration when "remember me" is true (30 days) [2592000000 (30 days)]
-    secret: cmV0dXJudGFsZXN3aXJlZGF3bmhpZGVvdXJkZXBlbmRsYWJvcnF1YXJ0ZXJjb2xsZWc= # JWT secret key (should be base64-encoded in production)
+    access-token-exp: ${JWT_ACCESS_TOKEN_EXP:2592000000} # Expiration time for the access token (15 min) [900000 (15 min)]
+    refresh-token-exp-no-remember: ${JWT_REFRESH_TOKEN_EXP_NO_REMEMBER:3600000} # Refresh token expiration when "remember me" is false (1 hour) [3600000 (1 hour)]
+    refresh-token-exp: ${JWT_REFRESH_TOKEN_EXP:2592000000} # Refresh token expiration when "remember me" is true (30 days) [2592000000 (30 days)]
+    secret: ${JWT_SECRET} # JWT secret key (should be base64-encoded in production)
 
   # CORS configuration
   cors:
@@ -38,15 +37,22 @@ blackout:
     allowed-headers: # Allowed headers in CORS requests [*]
       - "*"
     allowed-methods: # Allowed HTTP methods in CORS requests [*]
-      - "*"
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
     allowed-origins: # Allowed origins for CORS (use specific domains in production) [*]
-      - "*"
+      - "https://ciolaflix.francescodit.dev"
+      - "http://ciolaflix.francescodit.dev"
+      - "http://localhost:5173"
 
   # Security filter chain rules
   filterchain:
     allowed:
       - /ciola/signup
-      - /tmdb/**
+      - /ws
+      - /tmdb
 
   # OpenAPI/Swagger configuration
   openapi:
@@ -55,7 +61,7 @@ blackout:
 
 tmdb:
   api-url: ${TMDB_API_URL:https://api.themoviedb.org/3}
-  api-key: ${TMDB_API_KEY:eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YjM3ZWNmMmExNTg1MDk3ZTExYmZiNWMyMGJjMDQwMiIsIm5iZiI6MTc1NTQ1MjA2Mi43MTgwMDAyLCJzdWIiOiI2OGEyMTI5ZTU5ODE2Nzc3ODI2MzI1NjMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.mqOVvK8jblJf3rot-LLMZkZ5V7u3JQnLNFQBRRDXMXM}
+  api-key: ${TMDB_API_KEY}
 
 cors:
   origin: "http://localhost:5173"

@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: ciolaflix-postgres
+    environment:
+      POSTGRES_DB: ciolaflix
+      POSTGRES_USER: ${DB_USERNAME} #required
+      POSTGRES_PASSWORD: ${DB_PASSWORD} #required
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ciolaflix"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ciolaflix-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        GITHUB_USERNAME: ${GITHUB_USERNAME} #required
+        GITHUB_TOKEN: ${GITHUB_TOKEN} #required
+    container_name: ciolaflix-app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/ciolaflix
+      DB_USERNAME: ${DB_USERNAME} #required
+      DB_PASSWORD: ${DB_PASSWORD} #required
+      JWT_SECRET: ${JWT_SECRET} #required
+      JWT_ACCESS_TOKEN_EXP: ${JWT_ACCESS_TOKEN_EXP}
+      JWT_REFRESH_TOKEN_EXP_NO_REMEMBER: ${JWT_REFRESH_TOKEN_EXP_NO_REMEMBER}
+      JWT_REFRESH_TOKEN_EXP: ${JWT_REFRESH_TOKEN_EXP}
+      TMDB_API_URL: ${TMDB_API_URL}
+      TMDB_API_KEY: ${TMDB_API_KEY} #required
+      CORS_ORIGIN: ${CORS_ORIGIN} #required
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - ciolaflix-net
+
+volumes:
+  postgres_data:
+
+networks:
+  ciolaflix-net:
+    driver: bridge

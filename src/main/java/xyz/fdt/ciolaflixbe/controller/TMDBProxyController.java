@@ -6,7 +6,6 @@ import xyz.fdt.ciolaflixbe.dto.tmdb.TmdbResponseDTO;
 
 @RestController
 @RequestMapping("/tmdb")
-@CrossOrigin(origins = "${cors.origin}")
 public class TMDBProxyController {
 
     private final TMDBProxyService proxyService;
