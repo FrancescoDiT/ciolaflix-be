@@ -44,6 +44,7 @@ blackout:
       - OPTIONS
     allowed-origins: # Allowed origins for CORS (use specific domains in production) [*]
       - "https://ciolaflix.francescodit.dev"
+      - "http://ciolaflix.francescodit.dev"
       - "http://localhost:5173"
 
   # Security filter chain rules
