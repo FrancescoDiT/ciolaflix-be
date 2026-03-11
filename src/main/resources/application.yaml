@@ -46,6 +46,7 @@ blackout:
   filterchain:
     allowed:
       - /ciola/signup
+      - /tmdb/**
 
   # OpenAPI/Swagger configuration
   openapi:
