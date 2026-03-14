@@ -44,7 +44,6 @@ blackout:
       - OPTIONS
     allowed-origins: # Allowed origins for CORS (use specific domains in production) [*]
       - "https://ciolaflix.francescodit.dev"
-      - "http://ciolaflix.francescodit.dev"
       - "http://localhost:5173"
 
   # Security filter chain rules
@@ -52,7 +51,7 @@ blackout:
     allowed:
       - /ciola/signup
       - /ws
-      - /tmdb
+      - /tmdb/**
 
   # OpenAPI/Swagger configuration
   openapi:
@@ -63,5 +62,3 @@ tmdb:
   api-url: ${TMDB_API_URL:https://api.themoviedb.org/3}
   api-key: ${TMDB_API_KEY}
 
-cors:
-  origin: "http://localhost:5173"
