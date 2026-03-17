@@ -1,6 +1,7 @@
 package xyz.fdt.ciolaflixbe.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import xyz.fdt.ciolaflixbe.dto.request.ContinueWatchingRequestDTO;
 import xyz.fdt.ciolaflixbe.dto.request.MediaRequestDTO;
 import xyz.fdt.ciolaflixbe.dto.response.ContinueWatchingResponse;
+import xyz.fdt.ciolaflixbe.exception.ErrorResponse;
 import xyz.fdt.ciolaflixbe.service.ContinueWatchingService;
 
 import java.util.List;
@@ -43,23 +45,23 @@ public class ContinueWatchingController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid request",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    description = "Invalid request or movie cannot have seasons/episodes",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - user not authenticated",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "404",
                     description = "Media not found in TMDB",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "500",
-                    description = "Internal server error",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    description = "Internal server error connecting to TMDB",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             )
     })
     public ResponseEntity<Void> addContinueWatching(@RequestBody @Valid ContinueWatchingRequestDTO request) {
@@ -80,22 +82,22 @@ public class ContinueWatchingController {
             @ApiResponse(
                     responseCode = "400",
                     description = "Invalid request",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - user not authenticated",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Media not found in continue watching list",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    description = "Media not found in TMDB or continue watching list",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "500",
                     description = "Internal server error connecting to TMDB",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             )
     })
     public ResponseEntity<Void> deleteContinueWatching(@RequestBody @Valid MediaRequestDTO request) {
@@ -112,17 +114,17 @@ public class ContinueWatchingController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Successfully retrieved continue watching media list",
-                    content = @Content(schema = @Schema(implementation = List.class))
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ContinueWatchingResponse.class)))
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - user not authenticated",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "500",
                     description = "Internal server error",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             )
     })
     public ResponseEntity<List<ContinueWatchingResponse>> getContinueWatching() {
