@@ -1,6 +1,7 @@
 package xyz.fdt.ciolaflixbe.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.fdt.ciolaflixbe.dto.request.MediaRequestDTO;
 import xyz.fdt.ciolaflixbe.dto.response.MediaAndTypeDTO;
+import xyz.fdt.ciolaflixbe.exception.ErrorResponse;
 import xyz.fdt.ciolaflixbe.service.LikedService;
 
 import java.util.List;
@@ -42,23 +44,23 @@ public class LikedController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Media already liked by user or invalid request",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    description = "Invalid request, invalid media type, or media already liked by user",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - user not authenticated",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Media not found in TMDB",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    description = "User or media not found in TMDB",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "500",
                     description = "Internal server error connecting to TMDB",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             )
     })
     public ResponseEntity<Void> addLiked(@RequestBody @Valid MediaRequestDTO request) {
@@ -78,23 +80,23 @@ public class LikedController {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid request",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    description = "Invalid request or invalid media type",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - user not authenticated",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Media not found in liked list",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    description = "User, media, or liked entry not found",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "500",
                     description = "Internal server error connecting to TMDB",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             )
     })
     public ResponseEntity<Void> deleteLiked(@RequestBody @Valid MediaRequestDTO request) {
@@ -111,17 +113,12 @@ public class LikedController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Successfully retrieved liked media list",
-                    content = @Content(schema = @Schema(implementation = List.class))
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = MediaAndTypeDTO.class)))
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized - user not authenticated",
-                    content = @Content(schema = @Schema(implementation = String.class))
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal server error connecting to TMDB",
-                    content = @Content(schema = @Schema(implementation = String.class))
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))
             )
     })
     public ResponseEntity<List<MediaAndTypeDTO>> getLiked() {
