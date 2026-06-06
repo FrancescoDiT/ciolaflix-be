@@ -47,6 +47,8 @@ public class CiolaDetailService implements UserDetailsService {
             // Default Blackout fields
             .authId(authAccount.getId())
             .userId(user.getId())
+            .firstName(authAccount.getFirstName())
+            .lastName(authAccount.getLastName())
             .authorities(authorities)
             .username(username)
             .password(authAccount.getPasswordHash())
