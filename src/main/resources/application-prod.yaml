@@ -26,7 +26,7 @@ blackout:
 
   # !!REQUIRED!! JWT configuration
   jwt:
-    access-token-exp: ${JWT_ACCESS_TOKEN_EXP:2592000000} # Expiration time for the access token (15 min) [900000 (15 min)]
+    access-token-exp: ${JWT_ACCESS_TOKEN_EXP:900000} # Expiration time for the access token (15 min) [900000 (15 min)]
     refresh-token-exp-no-remember: ${JWT_REFRESH_TOKEN_EXP_NO_REMEMBER:3600000} # Refresh token expiration when "remember me" is false (1 hour) [3600000 (1 hour)]
     refresh-token-exp: ${JWT_REFRESH_TOKEN_EXP:2592000000} # Refresh token expiration when "remember me" is true (30 days) [2592000000 (30 days)]
     secret: ${JWT_SECRET} # JWT secret key (should be base64-encoded in production)

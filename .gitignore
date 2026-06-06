@@ -43,5 +43,5 @@ build/
 ### Environment variables ###
 .env
 
-### app-dev ###
+### application dev ###
 src/main/resources/application-dev.yaml

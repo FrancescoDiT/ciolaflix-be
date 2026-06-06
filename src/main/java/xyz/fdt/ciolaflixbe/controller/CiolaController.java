@@ -9,16 +9,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.fdt.ciolaflixbe.dto.request.SignupRequestDTO;
 import xyz.fdt.ciolaflixbe.dto.request.UpdateUserInfoRequestDTO;
 import xyz.fdt.ciolaflixbe.dto.response.UserInfoDTO;
+import xyz.fdt.ciolaflixbe.exception.ErrorResponse;
 import xyz.fdt.ciolaflixbe.service.CiolaService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/ciola")
@@ -41,7 +42,12 @@ public class CiolaController {
         @ApiResponse(
             responseCode = "400",
             description = "Invalid input data",
-            content = @Content(schema = @Schema(implementation = String.class))
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+        ),
+        @ApiResponse(
+            responseCode = "409",
+            description = "Email already in use",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
         )
     })
     public ResponseEntity<Void> signUp(@RequestBody @Valid SignupRequestDTO request){
@@ -62,7 +68,13 @@ public class CiolaController {
         ),
         @ApiResponse(
             responseCode = "401",
-            description = "Unauthorized - user not authenticated"
+            description = "Unauthorized - user not authenticated",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "User not found",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
         )
     })
     public ResponseEntity<UserInfoDTO> getUserInfo() {
@@ -81,11 +93,18 @@ public class CiolaController {
         ),
         @ApiResponse(
             responseCode = "400",
-            description = "Invalid request data"
+            description = "Invalid request data",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
         ),
         @ApiResponse(
             responseCode = "401",
-            description = "Unauthorized - user not authenticated"
+            description = "Unauthorized - user not authenticated",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "User not found",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
         )
     })
     public ResponseEntity<Void> updateUserInfo(@RequestBody @Valid UpdateUserInfoRequestDTO request) {
