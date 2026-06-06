@@ -67,11 +67,16 @@ public class ContinueWatchingService {
                 .orElseGet(() -> createMedia(mediaId, MediaType.fromString(mediaType)));
 
         ContinueWatching continueWatching = continueWatchingRepo.findByCiolaManIdAndMediaId(user.getId(), media.getId())
-                .orElse(new ContinueWatching(user, media,
+                .orElseGet(() -> new ContinueWatching(user, media,
                     seasonId,
                     episodeId));
 
         continueWatching.setCurrentTime(request.getCurrentTime());
+        
+        if (MediaType.TV == MediaType.fromString(mediaType)) {
+            continueWatching.setSeasonId(seasonId);
+            continueWatching.setEpisodeId(episodeId);
+        }
 
         continueWatchingRepo.save(continueWatching);
     }
